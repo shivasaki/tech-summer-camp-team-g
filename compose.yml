@@ -18,3 +18,22 @@ services:
       - "/app/node_modules"
     stdin_open: true
     tty: true
+  db:
+    container_name: db
+    build: ./db
+    ports:
+      - "3000:3000"
+    volumes:
+      - db-store:/var/lib/postgresql/data
+      - ./db/schema.sql:/database/schema.sql
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "postgres"
+    networks:
+      - diceogen-network
+
+volumes:
+  db-store:
+
+networks:
+  diceogen-network:

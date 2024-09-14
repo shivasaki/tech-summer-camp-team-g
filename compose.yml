@@ -18,17 +18,6 @@ services:
       - "/app/node_modules"
     stdin_open: true
     tty: true
-    networks:
-      - diceogen-network
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - "/app/node_modules"
-    stdin_open: true
-    tty: true
   db:
     container_name: db
     build: ./db

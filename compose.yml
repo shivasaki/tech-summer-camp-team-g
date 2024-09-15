@@ -22,7 +22,7 @@ services:
     container_name: db
     build: ./db
     ports:
-      - "3000:3000"
+      - "5432:5432"
     volumes:
       - db-store:/var/lib/postgresql/data
       - ./db/schema.sql:/database/schema.sql

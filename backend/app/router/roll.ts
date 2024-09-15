@@ -1,9 +1,10 @@
-import { Router, Request, Response } from "express";
+import { Router, Response } from "express";
 import { query } from "../utils/db";
+import { v4 as uuid } from "uuid";
 
 const router = Router();
 
-const rollRouter = router.post("/roll", async (req: Request, res: Response) => {
+const rollRouter = router.post("/roll", async (res: Response) => {
   try {
     const tokenId = "467dfc0b-aeb0-424e-98c0-e63b0004f7f2";
     console.log(tokenId);
@@ -12,8 +13,8 @@ const rollRouter = router.post("/roll", async (req: Request, res: Response) => {
 
     // 新しいセッションを作成
     const result = await query(
-      `INSERT INTO roll_session (token_id, requested_at) VALUES ($1, $2) RETURNING id`,
-      [tokenId, requestedAt]
+      `INSERT INTO roll_session (id, token_id, requested_at) VALUES ($1, $2, $3) RETURNING id`,
+      [uuid(), tokenId, requestedAt]
     );
     console.log(result);
     const sessionId = result.rows[0].id;

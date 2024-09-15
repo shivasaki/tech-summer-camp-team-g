@@ -18,11 +18,13 @@ services:
       - "/app/node_modules"
     stdin_open: true
     tty: true
+    networks:
+      - diceogen-network
   db:
     container_name: db
     build: ./db
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - db-store:/var/lib/postgresql/data
       - ./db/schema.sql:/database/schema.sql

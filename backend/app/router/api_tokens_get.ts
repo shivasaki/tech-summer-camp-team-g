@@ -2,9 +2,9 @@ import { Router, Response } from "express";
 import { query } from "../utils/db";
 
 type TokenInfo = {
-  token_id: string;
-  created_at: Date;
-  expired_at: Date;
+  tokenId: string;
+  createdAt: Date;
+  expiredAt: Date;
 };
 
 const router = Router();
@@ -23,8 +23,18 @@ const apiTokensGetRouter = router.get("/api_tokens", async (req, res: Response) 
       [sessionId, new Date()]
     );
 
+    const sessionAll = await query(
+      `SELECT * FROM user_session WHERE session_id = $1`,
+      [sessionId]
+    );
+
     if (session.rows.length === 0) {
-      return res.status(403).json({ error: "expired session" });
+      if (sessionAll.rows.length === 0) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      else{
+        return res.status(403).json({ error: "expired session" });
+      }
     }
 
     console.log(session.rows[0].expired_at, new Date());
@@ -39,9 +49,9 @@ const apiTokensGetRouter = router.get("/api_tokens", async (req, res: Response) 
     );
 
     const tokenList: TokenInfo[] = result.rows.map((row) => ({
-      token_id: row.token_id,
-      created_at: row.created_at,
-      expired_at: row.expired_at,
+      tokenId: row.token_id,
+      createdAt: row.created_at,
+      expiredAt: row.expired_at,
     }));
 
     res.status(200).json({ tokenList });

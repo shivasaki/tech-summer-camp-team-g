@@ -1,28 +1,10 @@
-FROM ubuntu:latest
+FROM python:3.9-slim-buster
 
-ENV PYTHON_VERSION 3.12
-ENV HOME /root
-ENV PYTHON_ROOT $HOME/local/python-$PYTHON_VERSION
-ENV PATH $PYTHON_ROOT/bin:$PATH
-ENV PYENV_ROOT $HOME/.pyenv
+WORKDIR /app
 
-# タイムゾーン
-RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# apt
-RUN apt update
-RUN apt install -y libopencv-dev
+ENV FLASK_APP=app.py
 
-# install python and pip
-RUN apt install -y python3 python3-pip
-#RUN pip install --upgrade pip
-
-# set working directory and copy files
-WORKDIR /usr/src/app
-COPY ./ /usr/src/app
-
-# install opencv
-#RUN pip install opencv-python
-RUN apt install -y python3-opencv
-
-CMD ["python3", "./main.py"]
+CMD ["flask", "run", "--host=0.0.0.0"]

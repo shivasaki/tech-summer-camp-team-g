@@ -1,5 +1,6 @@
 services:
   backend:
+    container_name: backend
     build: ./backend
     ports:
       - "8000:3000"
@@ -9,3 +10,25 @@ services:
     environment:
       - NODE_ENV=development
       - NITRO_PORT=8000
+    networks:
+      - diceogen-network
+  db:
+    container_name: db
+    build: ./db
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+      - ./db/schema.sql:/database/schema.sql
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'postgres'
+    networks:
+      - diceogen-network
+      
+volumes:
+  db-store:
+
+networks:
+  diceogen-network:
+    

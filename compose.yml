@@ -1,8 +1,9 @@
 services:
   backend:
+    container_name: backend
     build: ./backend
     ports:
-      - "8000:8000"
+      - "8000:3000"
     volumes:
       - ./backend:/app
       - "/app/node_modules"
@@ -17,3 +18,29 @@ services:
       - "/app/node_modules"
     stdin_open: true
     tty: true
+  db:
+    container_name: db
+    build: ./db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-store:/var/lib/postgresql/data
+      - ./db/schema.sql:/database/schema.sql
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "postgres"
+    networks:
+      - diceogen-network
+  dicend:
+    build: ./dicend/dice-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./dicend/dice-server:/app
+    tty: true
+
+volumes:
+  db-store:
+
+networks:
+  diceogen-network:

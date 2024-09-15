@@ -2,7 +2,7 @@
 
 -- Table Definition
 CREATE TABLE "public"."roll_session" (
-    "id" BIGSERIAL NOT NULL,
+    "id" uuid NOT NULL,
     "token_id" uuid NOT NULL,
     "requested_at" timestamp NOT NULL,
     "rolled_at" timestamp,

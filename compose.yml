@@ -9,6 +9,11 @@ services:
       - "/app/node_modules"
     environment:
       - NODE_ENV=development
+    depends_on:
+      - db
+    networks:
+      - diceogen-network
+
   frontend:
     build: ./frontend
     ports:
@@ -18,11 +23,12 @@ services:
       - "/app/node_modules"
     stdin_open: true
     tty: true
+  
   db:
     container_name: db
     build: ./db
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - db-store:/var/lib/postgresql/data
       - ./db/schema.sql:/database/schema.sql

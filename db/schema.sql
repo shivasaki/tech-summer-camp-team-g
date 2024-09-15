@@ -16,7 +16,8 @@ CREATE TABLE "public"."roll_session" (
 -- Table Definition
 CREATE TABLE "public"."token" (
     "id" uuid NOT NULL,
-    "token" text NOT NULL,
+    "token" uuid NOT NULL,
+    "token_id" text NOT NULL,
     "user_id" uuid NOT NULL,
     "created_at" timestamp NOT NULL DEFAULT now(),
     "expired_at" timestamp,

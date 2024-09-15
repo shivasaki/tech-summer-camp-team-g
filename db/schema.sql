@@ -35,4 +35,16 @@ CREATE TABLE "public"."user" (
     PRIMARY KEY ("id")
 );
 
+-- This script only contains the table creation statements and does not fully represent the table in the database. Do not use it as a backup.
+
+-- Table Definition
+CREATE TABLE "public"."user_session" (
+    "id" uuid NOT NULL,
+    "session_id" uuid NOT NULL,
+    "user_id" uuid NOT NULL,
+    "created_at" timestamp NOT NULL DEFAULT now(),
+    "expired_at" timestamp NOT NULL,
+    PRIMARY KEY ("id")
+);
+
 ALTER TABLE "public"."token" ADD FOREIGN KEY ("user_id") REFERENCES "public"."user"("id");

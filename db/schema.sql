@@ -7,6 +7,7 @@ CREATE TABLE "public"."roll_session" (
     "requested_at" timestamp NOT NULL,
     "rolled_at" timestamp,
     "completed_at" timestamp,
+    "result" text,
     "user_id" numeric,
     PRIMARY KEY ("id")
 );

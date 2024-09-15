@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import rollRouter from "./router/roll";
+import statusRouter from "./router/status";
 import express from "express";
 
 export const app = express();
@@ -10,6 +11,7 @@ app.get("/", (_: Request, res: Response) => {
 });
 
 app.use(rollRouter);
+app.use(statusRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

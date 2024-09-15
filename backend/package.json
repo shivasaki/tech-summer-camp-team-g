@@ -4,11 +4,15 @@
     "dev": "npx nodemon app/app.ts"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@types/pg": "^8.11.10",
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "pg": "^8.12.0"
+    "pg": "^8.12.0",
+    "uuid": "^10.0.0"
   }
 }

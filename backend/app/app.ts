@@ -6,6 +6,7 @@ import meRouter from "./router/me";
 import apiTokensPostRouter from "./router/api_tokens_post";
 import apiTokensGetRouter from "./router/api_tokens_get";
 import apiTokensTokenGetRouter from "./router/api_tokens_token_get";
+import statusRouter from "./router/status";
 import express from "express";
 import cookieParser from "cookie-parser";
 
@@ -32,6 +33,7 @@ app.use(meRouter);
 app.use(apiTokensPostRouter);
 app.use(apiTokensGetRouter);
 app.use(apiTokensTokenGetRouter);
+app.use(statusRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

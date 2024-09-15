@@ -23,11 +23,20 @@ WebServer server(80);
 #define LED_CONNECT 14
 #define LED_ACTIVE 13
 #define SW_RESET 15
+#define LED_ROLLING 16
+#define CTRL_MOTOR_1 28
 const int led = LED_ACTIVE;
 
 // ステータス
 // 0: 起動中 10: ready 20: rolling 30: error
 int system_status = 0;
+
+
+// rolling の開始時刻(millis)
+unsigned long time_start_rolling = 0;
+
+// rolling の終了時刻(millis)
+unsigned long time_toend_rolling = 0;
 
 void handleRoot() {
   digitalWrite(LED_ACTIVE, 1);
@@ -83,19 +92,22 @@ void handleRoll(){
     String message = "";
     if(system_status == 10){
       //10 ready
+      // ロールをスタートさせる
       system_status = 20;
-      message = "started rolling";
-      server.send(202, "text/plain", message);
+      time_start_rolling = millis();
+      time_toend_rolling = millis() + 2000;
+      message = "{\"message\": \"started rolling\"}";
+      server.send(202, "application/json", message);
   }
     if(system_status == 20){
       //20 rolling
-      message = "already on roll";
-      server.send(400, "text/plain", message);
+      message = "{\"message\": \"already rolling\"}";
+      server.send(503, "application/json", message);
     }
     if(system_status == 30){
       //30 error
-      message = "error";
-      server.send(500, "text/plain", message);
+      message = "{\"message\": \"error\"}";
+      server.send(500, "application/json", message);
     }
   }
   digitalWrite(LED_ACTIVE, 0);
@@ -105,7 +117,9 @@ void setup(void) {
   delay(1000);
   pinMode(LED_ACTIVE, OUTPUT);
   pinMode(LED_CONNECT, OUTPUT);
+  pinMode(LED_ROLLING, OUTPUT);
   pinMode(SW_RESET, INPUT_PULLUP);
+  pinMode(CTRL_MOTOR_1, OUTPUT);
   digitalWrite(LED_ACTIVE, 0);
   digitalWrite(LED_CONNECT, 0);
   Serial.begin(115200);
@@ -252,6 +266,7 @@ void setup(void) {
 }
 
 void loop(void) {
+  // WebServer
   if(WiFi.status() != WL_CONNECTED){
     digitalWrite(LED_CONNECT, LOW);
     Serial.print("WiFi error: status is ");
@@ -262,5 +277,21 @@ void loop(void) {
     digitalWrite(LED_CONNECT, HIGH);
     server.handleClient();
     MDNS.update();
+  }
+
+  // Roller
+  if(system_status / 10 == 2){
+    digitalWrite(LED_ROLLING, HIGH);
+    digitalWrite(CTRL_MOTOR_1, HIGH);
+  }else{
+    digitalWrite(LED_ROLLING, LOW);
+    digitalWrite(CTRL_MOTOR_1, LOW);
+  }
+
+  // Roller の終了判定
+  if(system_status / 10 == 2){
+    if(time_toend_rolling < millis()){
+      system_status = 10;
+    }
   }
 }

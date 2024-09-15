@@ -29,12 +29,7 @@ const apiTokensGetRouter = router.get("/api_tokens", async (req, res: Response) 
     );
 
     if (session.rows.length === 0) {
-      if (sessionAll.rows.length === 0) {
-        return res.status(401).json({ error: "Unauthorized" });
-      }
-      else{
-        return res.status(403).json({ error: "expired session" });
-      }
+      return res.status(403).json({ error: "expired session" });
     }
 
     console.log(session.rows[0].expired_at, new Date());

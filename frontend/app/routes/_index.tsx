@@ -20,13 +20,9 @@ export default function Index() {
       <input type="text" placeholder="ユーザー名" />
       <input type="email" placeholder="メールアドレス" />
       <input type="password" placeholder="パスワード" />
-      <Link to="/token">新規登録</Link>
+      <Link to="/account/register">新規登録</Link>
 
-      <Link
-        to="/reference"
-      >
-        リファレンスを見る
-      </Link>
+      <Link to="/reference">リファレンスを見る</Link>
     </div>
   );
 }

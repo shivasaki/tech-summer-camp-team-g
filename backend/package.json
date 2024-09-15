@@ -1,12 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "build": "nitro build",
-    "dev": "nitro dev",
-    "prepare": "nitro prepare",
-    "preview": "node .output/server/index.mjs"
+    "dev": "npx nodemon app/app.ts"
   },
   "devDependencies": {
-    "nitropack": "latest"
+    "@types/pg": "^8.11.10",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "pg": "^8.12.0"
   }
 }

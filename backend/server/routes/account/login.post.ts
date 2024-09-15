@@ -5,6 +5,7 @@ type PostRequest = Partial<{
 
 export default defineEventHandler(async (event) => {
     const body = await readBody<PostRequest>(event);
+    // TODO: バリデーションを追加する
     if(!body.password){
         throw new Error("Missing passsword");
     }

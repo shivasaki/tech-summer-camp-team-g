@@ -19,6 +19,7 @@ const rollRequestJob = async (sessionId: string): Promise<void> => {
     // セッションが完了するまで1秒ごとに結果を聞く
     while (true) {
         const response = await axios.get(`${statusUrl}`);
+        console.log("status: ", response.data);
         if (response.data.status == "completed") {
             // 結果をDBに保存
             await query(

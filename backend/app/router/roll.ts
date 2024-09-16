@@ -18,7 +18,7 @@ const rollRouter = router.post("/roll", async (req, res: Response) => {
         // トークンの有効性を確認
         const tokenResult = await query(
           `SELECT * FROM token WHERE token = $1`,
-          [token, new Date()]
+          [token]
         );
 
         const tokenExpired = await query(

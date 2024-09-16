@@ -20,7 +20,7 @@ const statusRouter = router.post("/status/:session_id", async (req, res: Respons
         // トークンの有効性を確認
         const tokenResult = await query(
           `SELECT * FROM token WHERE token = $1`,
-          [token, new Date()]
+          [token]
         );
 
         const tokenExpired = await query(

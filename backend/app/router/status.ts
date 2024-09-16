@@ -15,22 +15,25 @@ const statusRouter = router.post("/status/:session_id", async (req, res: Respons
       const token = authHeader.split(' ')[1];
       console.log(token);
 
-      // トークンの有効性を確認
-      const tokenResult = await query(
-        `SELECT * FROM token WHERE token = $1`,
-        [token, new Date()]
-      );
+      // アドミンユーザーの場合は認証はスキップ
+      if(token != process.env.API_ADMIN_USERNAME){
+        // トークンの有効性を確認
+        const tokenResult = await query(
+          `SELECT * FROM token WHERE token = $1`,
+          [token, new Date()]
+        );
 
-      const tokenExpired = await query(
-        `SELECT * FROM token WHERE token = $1 AND expired_at > $2`,
-        [token, new Date()]
-      );
+        const tokenExpired = await query(
+          `SELECT * FROM token WHERE token = $1 AND expired_at > $2`,
+          [token, new Date()]
+        );
 
-      if (tokenResult.rows.length === 0) {
-        return res.status(404).json({ error: "Token not found" });
-      }
-      if (tokenExpired.rows.length === 0) {
-        return res.status(403).json({ error: "Token expired" });
+        if (tokenResult.rows.length === 0) {
+          return res.status(404).json({ error: "Token not found" });
+        }
+        if (tokenExpired.rows.length === 0) {
+          return res.status(403).json({ error: "Token expired" });
+        }
       }
 
       // セッションの状態を取得
